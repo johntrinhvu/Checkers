@@ -1,0 +1,53 @@
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5)), url("https://wallpapercave.com/wp/wp2572376.jpg");
+    background-size: cover;
+    color: white;
+}
+
+td {
+    background-color: rgb(128, 128, 128, 0.7);
+    height: 55px;
+    width: 55px;
+    text-align: center;
+
+}
+
+.emptySpace {
+    background-color: rgb(235, 228, 227, 0.7);
+
+}
+
+.red {
+    height: 15px;
+    width: 15px;
+    margin: auto;
+    padding: 10px;
+    background-color: #ff6961;
+    border: 1px solid red;
+    border-radius: 50%;
+
+}
+
+.king.red {
+    background-color: #C4A484;
+    border: 1px solid brown;
+
+}
+
+.blue {
+    height: 15px;
+    width: 15px;
+    margin: auto;
+    padding: 10px;
+    background-color: #0096FF;
+    border: 1px solid blue;
+    border-radius: 50%;
+
+}
+
+.king.blue {
+    background-color: #CBC3E3;
+    border: 1px solid purple;
+    
+}
