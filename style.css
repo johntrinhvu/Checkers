@@ -35,27 +35,36 @@ body {
     justify-content: center;
     align-items: center;
 
-
 }
 
-td {
-    background-color: rgb(128, 128, 128, 0.7);
-    height: 55px;
-    width: 55px;
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(8, 7vmin);
+    grid-template-rows: repeat(8, 7vmin);
+    margin-top: 1vmin;
+    font-size: 8vmin;
     text-align: center;
-
+    justify-content: center;
+        
 }
 
-.emptySpace {
+.cell-gray {
+    background-color: rgb(128, 128, 128, 0.7);
+
+}
+  
+.cell-white {
     background-color: rgb(235, 228, 227, 0.7);
 
 }
 
+
 .red {
-    height: 35px;
-    width: 35px;
+    height: 5.5vmin;
+    width: 5.5vmin;
     margin: auto;
-    padding: 10px;
+    margin-top: 0.7vmin;
     background-color: #ff6961;
     border: 1px solid red;
     border-radius: 50%;
@@ -69,10 +78,10 @@ td {
 }
 
 .blue {
-    height: 35px;
-    width: 35px;
+    height: 5.5vmin;
+    width: 5.5vmin;
     margin: auto;
-    padding: 10px;
+    margin-top: 0.7vmin;
     background-color: #0096FF;
     border: 1px solid blue;
     border-radius: 50%;

@@ -6,51 +6,70 @@
 const PLAYERS = {
     "0": null,
     "1": {
+        "name": "BLUE", 
+        "color": "#0096FF", // light blue
+        "score": 12,
+        "identity": 1
+
+    },
+    "-1": {
         "name": "RED",
-        "color": "#ff6961",
-        "score": 12
+        "color": "#ff6961", // light red
+        "score": 12,
+        "id": -1
         
     },
-
-    "-1": {
-        "name": "BLUE", // light red
-        "color": "#0096FF", // light blue
-        "score": 12
-
-    },
-
     "draw": "#C4A484" // color for Draw
 
 }
 
 /* State Variables */
-const board = [
-    null, 0, null, 1, null, 2, null, 3, null, 4, null, 5, null, 6, null, 7, 
-    null, 8, null, 9, null, 10, null, 11, null, 12, null, 13, null, 14, null, 15, 
-    null, 16, null, 17, null, 18, null, 19, null, 20, null, 21, null, 22, null, 23, null 
-
-]
-
-let turn;
-let score;
-let winner;
+let turn; // either 1 (blue) or -1 (red)
+let score; // 12 pieces on each side
+let board; // an array of arrays of 8x8 - 64 total spaces
+let winner; // wiiner has to be blue or red, T for draw
 
 /* Cached Elements */
-const allSpaces = document.querySelectorAll("td");
+const cells = document.querySelectorAll("div");
 const messageEl = document.querySelector("h1");
-let redObjects = document.querySelectorAll("h2");
-let blueObjects = document.querySelectorAll("h3");
+let redPieces = document.querySelectorAll("h3");
+let bluePieces = document.querySelectorAll("h4");
 const resetBoardBtn = document.querySelector("button");
 
 /* Event Listeners */
 
 
+// call init
+init();
+
 /* Functions */
+function init() {
+    // to visualize the board's mapping to the DOM, rotate 90 degrees counter-clockwise
+  
+    board = [
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 0
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 1
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 2
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 3
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 4
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 5
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 6
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 7
+
+    ];
+    turn = 1;
+    winner = null;
+    render();
+    
+}
+
 function render() {
+    // renderBoard();
     renderMessage();
     renderControls();
 
 }
+
 
 function renderMessage() {
     // if tie
