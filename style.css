@@ -59,7 +59,6 @@ body {
 
 }
 
-
 .red {
     height: 5.5vmin;
     width: 5.5vmin;
@@ -71,8 +70,14 @@ body {
 
 }
 
+.red:hover {
+    cursor: pointer;
+    border: 2px solid #bdbd55;
+}
+
+
 .king.red {
-    background-color: #C4A484;
+    background-color: #74512e;
     border: 1px solid brown;
 
 }
@@ -88,8 +93,20 @@ body {
 
 }
 
+.blue:hover {
+    cursor: pointer;
+    border: 2px solid #bdbd55;
+
+}
+
 .king.blue {
     background-color: #CBC3E3;
     border: 1px solid purple;
     
+}
+
+.pieceSelected {
+    background-color: #bdbd87;
+    border: 2px solid yellow;
+
 }
