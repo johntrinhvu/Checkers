@@ -5,16 +5,22 @@
 /* Constant Variables */
 const PLAYERS = {
     "0": null,
-    "1": "RED",
-    "-1": "BLUE"
+    "1": {
+        "name": "RED",
+        "color": "#ff6961",
+        "score": 12
+        
+    },
 
-}
+    "-1": {
+        "name": "BLUE", // light red
+        "color": "#0096FF", // light blue
+        "score": 12
 
-const COLORS = {
-    "1": "#ff6961", // light red
-    "-1": "#0096FF", // light blue
-    "draw": "#C4A484" // color when there is Draw
-  
+    },
+
+    "draw": "#C4A484" // color for Draw
+
 }
 
 /* State Variables */
@@ -26,6 +32,7 @@ const board = [
 ]
 
 let turn;
+let score;
 let winner;
 
 /* Cached Elements */
@@ -40,7 +47,6 @@ const resetBoardBtn = document.querySelector("button");
 
 /* Functions */
 function render() {
-    // renderBoard();
     renderMessage();
     renderControls();
 
@@ -49,16 +55,16 @@ function render() {
 function renderMessage() {
     // if tie
     if (winner === "T") {
-        messageEl.innerHTML = `<span style="color: ${COLORS.draw};font-size:4vmin">DRAW</span>`
+        messageEl.innerHTML = `<span style="color: ${PLAYERS.draw}">DRAW</span>`
     
     
     } else if (winner) {
         // we have winner
-        messageEl.innerHTML = `<span style="color: ${COLORS[winner]};font-size:4vmin">${PLAYERS[winner]}</span> WINS!`
+        messageEl.innerHTML = `<span style="color: ${PLAYERS[winner].color}">${PLAYERS[winner].name}</span> WINS!`
     
     } else {
         // Game is still in play
-        messageEl.innerHTML = `<span style="color: ${COLORS[turn]};font-size:4vmin">${PLAYERS[turn]}</span>'s TURN`
+        messageEl.innerHTML = `<span style="color: ${PLAYERS[turn].color}">${PLAYERS[turn].name}</span>'s TURN`
     }
 
 }
