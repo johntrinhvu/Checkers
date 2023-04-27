@@ -85,8 +85,16 @@ function handleMove(piece) {
 
     // if there alr is selected piece, remove from the color and set to null
     if (selectedPiece) {
+        allHighlighted = document.querySelectorAll(".highlighted")
+
         selectedPiece.classList.remove("pieceSelected");
         selectedPiece = null;
+        
+        allHighlighted.forEach(function(cell) {
+            cell.classList.remove("highlighted");
+
+        });
+        
 
     }
 
@@ -99,43 +107,44 @@ function handleMove(piece) {
 
     // then highlight possible moves
     highlightPossibleMoves(currentCol, currentRow)
-    
 
+    
 
 }
 
 function highlightPossibleMoves(colIdx, rowIdx) {
     // Get current position of the piece that was clicked
     // what the player val is
-    const currentCell = board[colIdx][rowIdx];
-    const board_size = board.length * board.length;
+    const currentPlayer = board[colIdx][rowIdx];
 
-    if (currentCell !== 0) {
+    // if a piece exists on the board
+    if (currentPlayer !== 0) {
+        const left = colIdx - 1;
+        const right = colIdx + 1;
+        let forward = null;
         
-
+        // if the piece is the same color as current player's turn
+        if (currentPlayer === turn) { // blue or red all turns
+            forward = rowIdx + turn;
+            if (left >= 0 && board[left][forward] === 0) {
+                highlightCell(left, forward);
+    
+            }
+    
+            if (right <= 7 && board[right][forward] === 0) {
+                highlightCell(right, forward);
+    
+            }
+        }
     }
     
 }
-
-function isDiagonalCellEmpty(board, currentRow, currentCol, directionRow, directionCol) {
-    // Get the diagonal row and column
-    const diagonalRow = currentRow + directionRow;
-    const diagonalCol = currentCol + directionCol;
-    
-    // Check if the diagonal cell is within the board bounds
-    if (diagonalRow < 0 || diagonalRow >= board.length || diagonalCol < 0 || diagonalCol >= board[0].length) {
-      return false;
-    }
-    
-    // Check if the diagonal cell is empty
-    return board[diagonalRow][diagonalCol] === null;
-  }
 
 function highlightCell(colIdx, rowIdx) {
     const cell = document.getElementById(`c${colIdx}r${rowIdx}`);
     cell.classList.add('highlighted');
 
-  }
+}
 
 function render() {
     renderMessage();
