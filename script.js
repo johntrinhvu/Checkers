@@ -81,22 +81,22 @@ function handleMove(piece) {
     let currentCol = parseInt(currentPos[1]);
     let currentRow = parseInt(currentPos[3]);
 
-    console.log(currentPos, currentCol, currentRow);
+    // highlight piece
+    highlightCurrentPiece(clickedPiece)
 
-    // if there alr is selected piece, remove from the color and set to null
-    if (selectedPiece) {
-        allHighlighted = document.querySelectorAll(".highlighted")
+    // then highlight possible moves
+    const possibleMoves = getPossibleMoves(currentCol, currentRow);
+    // then can click on move
 
-        selectedPiece.classList.remove("pieceSelected");
-        selectedPiece = null;
+    possibleMoves.forEach(function(possibleMove) {
+        possibleMove.addEventListener('click', movePiece);
         
-        allHighlighted.forEach(function(cell) {
-            cell.classList.remove("highlighted");
+    });
+    
+}
 
-        });
-        
-
-    }
+function highlightCurrentPiece(clickedPiece) {
+    removeHighlights();
 
     // else if the piece is by the current player, it will add it to the css element
     if (clickedPiece.classList.contains(`${PLAYERS[turn].name}`)) {
@@ -104,18 +104,30 @@ function handleMove(piece) {
         clickedPiece.classList.add("pieceSelected");
         
     }
-
-    // then highlight possible moves
-    highlightPossibleMoves(currentCol, currentRow)
-
-    
-
 }
 
-function highlightPossibleMoves(colIdx, rowIdx) {
+function removeHighlights() {
+    // if there alr is selected piece, remove from the color and set to null
+    if (selectedPiece) {
+        selectedPiece.classList.remove("pieceSelected");
+        selectedPiece = null;
+
+    }
+
+    allHighlighted = document.querySelectorAll(".highlighted")
+    allHighlighted.forEach(function(cell) {
+        cell.classList.remove("highlighted");
+
+    });
+    
+}
+
+function getPossibleMoves(colIdx, rowIdx) {
     // Get current position of the piece that was clicked
     // what the player val is
     const currentPlayer = board[colIdx][rowIdx];
+    
+    const possibleMoves = [];
 
     // if a piece exists on the board
     if (currentPlayer !== 0) {
@@ -127,22 +139,39 @@ function highlightPossibleMoves(colIdx, rowIdx) {
         if (currentPlayer === turn) { // blue or red all turns
             forward = rowIdx + turn;
             if (left >= 0 && board[left][forward] === 0) {
-                highlightCell(left, forward);
+                const cell = document.getElementById(`c${left}r${forward}`);
+                cell.classList.add('highlighted');
+                possibleMoves.push(cell);
     
             }
     
             if (right <= 7 && board[right][forward] === 0) {
-                highlightCell(right, forward);
-    
+                const cell = document.getElementById(`c${right}r${forward}`);
+                cell.classList.add('highlighted');
+                possibleMoves.push(cell);
+                
             }
         }
     }
-    
+    return possibleMoves;
 }
 
-function highlightCell(colIdx, rowIdx) {
-    const cell = document.getElementById(`c${colIdx}r${rowIdx}`);
-    cell.classList.add('highlighted');
+function movePiece(cell) {
+    const moveToLocation = cell.target;
+
+    // to move cell, move piece to another parent;
+    moveToLocation.append(selectedPiece);
+    removeHighlights();
+    cells.forEach(function(cell) {
+        cell.removeEventListener("click", movePiece);
+
+    });
+
+    // update board and change turn
+    turn *= -1;
+
+    // then render the board again
+    render();
 
 }
 
