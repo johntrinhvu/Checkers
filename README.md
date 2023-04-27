@@ -29,7 +29,7 @@ Checkers is a classic board game where two players face off against each other, 
 To play the game, simply open the game link in your web browser. Blue starts first. Click on any of your own pieces that are valid and it should provide you with valid moves. Click on any of the squares to move to that location. Then, it will be the other player's turn. From then on, it will rotate. The objective is to try to get as many of the opponent's pieces as possible, without losing your own pieces.
 
 Here's an example:
-To play the game, simply click on the following link: [Checkers](https://johntrinhvu.github.io). Blue starts first. Click on any of your own pieces that are valid and it should provide you with valid moves. Click on any of the squares to move to that location. Then, it will be the other player's turn. From then on, it will rotate. The objective is to try to get as many of the opponent's pieces as possible, without losing your own pieces.
+To play the game, simply click on the following link: [Checkers](https://johntrinhvu.github.io/Checkers/). Blue starts first. Click on any of your own pieces that are valid and it should provide you with valid moves. Click on any of the squares to move to that location. Then, it will be the other player's turn. From then on, it will rotate. The objective is to try to get as many of the opponent's pieces as possible, without losing your own pieces.
 
 ## Next Steps
 - Develop fully the King pieces, so that once a piece reaches the end of the board, it can turn around and move backwards.
