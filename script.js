@@ -52,7 +52,7 @@ bluePieces.forEach(function (bluePiece) {
 });
 
 // reset board
-resetBoardBtn.addEventListener("click", resetGame)
+resetBoardBtn.addEventListener("click", resetGame);
 
 // call init
 init();
@@ -75,13 +75,15 @@ function init() {
 
     turn = 1;
     winner = null;
+    selectedPiece = null;
     render();
 
 }
 
-function handleMove(piece) {
+function handleMove(evt) {
     // Get the current position of the clicked piece
-    const clickedPiece = piece.target;
+    const clickedPiece = evt.target;
+    console.log(clickedPiece);
     let currentPos = clickedPiece.parentElement.id;
     let currentCol = parseInt(currentPos[1]);
     let currentRow = parseInt(currentPos[3]);
@@ -97,7 +99,6 @@ function handleMove(piece) {
         possibleMove.addEventListener('click', movePiece);
 
     });
-
 }
 
 function highlightCurrentPiece(clickedPiece) {
@@ -122,6 +123,7 @@ function removeHighlights() {
     allHighlighted = document.querySelectorAll(".highlighted")
     allHighlighted.forEach(function (cell) {
         cell.classList.remove("highlighted");
+        cell.style.cursor = "default";
 
     });
 
@@ -132,9 +134,10 @@ function getPossibleMoves(colIdx, rowIdx) {
     // what the player val is
     const currentPlayer = board[colIdx][rowIdx];
 
+    // make an array for all possible moves
     const possibleMoves = [];
 
-    // if a piece exists on the board
+    // if a piece exists on that specific cell
     if (currentPlayer !== 0) {
         const left = colIdx - 1;
         const right = colIdx + 1;
@@ -153,26 +156,30 @@ function getPossibleMoves(colIdx, rowIdx) {
             if (left >= 0 && board[left][forward] === 0) {
                 const cell = document.getElementById(`c${left}r${forward}`);
                 cell.classList.add('highlighted');
+                cell.style.cursor = "pointer";
                 possibleMoves.push(cell);
-
-                // capture piece left 2 up 2
+                
+            // capture piece left 2 up 2
             } else if (leftCapture >= 0 && board[leftCapture][forwardCapture] === 0 && board[left][forward] === oppositePlayer) {
                 const cell = document.getElementById(`c${leftCapture}r${forwardCapture}`);
                 cell.classList.add('highlighted');
+                cell.style.cursor = "pointer";
                 possibleMoves.push(cell);
-
+                
             }
-
+            
             // moving adjacent right up
             if (right <= 7 && board[right][forward] === 0) {
                 const cell = document.getElementById(`c${right}r${forward}`);
                 cell.classList.add('highlighted');
+                cell.style.cursor = "pointer";
                 possibleMoves.push(cell);
-
-                // capture piece right 2 up 2
+                
+            // capture piece right 2 up 2
             } else if (rightCapture <= 7 && board[rightCapture][forwardCapture] === 0 && board[right][forward] === oppositePlayer) {
                 const cell = document.getElementById(`c${rightCapture}r${forwardCapture}`);
                 cell.classList.add('highlighted');
+                cell.style.cursor = "pointer";
                 possibleMoves.push(cell);
 
             }
@@ -190,7 +197,11 @@ function movePiece(cell) {
 
     // to move cell, move piece to another parent;
     moveToLocation.append(selectedPiece);
+
+    // then remove highlights on the board
     removeHighlights();
+
+    // then remove the eventListener to click the piece
     cells.forEach(function (cell) {
         cell.removeEventListener("click", movePiece);
 
@@ -218,7 +229,9 @@ function movePiece(cell) {
         board[capturedCol][capturedRow] = 0;
 
         // now update the score
-        PLAYERS[oppositePlayer].score --;
+        PLAYERS[oppositePlayer].score -= 1;
+        
+        // console log the score testing; do not need to put the scoreboard on the page
         console.log(`${PLAYERS[oppositePlayer].name.toUpperCase()}: ${PLAYERS[oppositePlayer].score} pieces left.`)
         
     }
@@ -229,7 +242,6 @@ function movePiece(cell) {
     // change new cell to the piece
     board[newCol][newRow] = turn;
 
-    
     // check score if 0 we have winner
     if (PLAYERS[oppositePlayer].score === 0) {
         winner = turn;
@@ -238,16 +250,23 @@ function movePiece(cell) {
 
     // change turn to next player
     turn *= -1;
+    
+
 
     // then render the board again
     render();
 
 }
 
+
 function resetGame() {
-    // Clear HTML board
-    htmlBoard.innerHTML = originalBoardState;
+    // Reset board state variables
+    htmlBoard.innerHTMl = originalBoardState;
+    // originalBoardState.reset();
+
+    // then call init
     init();
+    console.log("Reset!")
 
 }
 
