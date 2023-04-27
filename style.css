@@ -37,7 +37,6 @@ body {
 
 }
 
-
 #board {
     display: grid;
     grid-template-columns: repeat(8, 7vmin);
@@ -75,13 +74,6 @@ body {
     border: 2px solid #bdbd55;
 }
 
-
-.king.red {
-    background-color: #74512e;
-    border: 1px solid brown;
-
-}
-
 .blue {
     height: 5.5vmin;
     width: 5.5vmin;
@@ -99,11 +91,6 @@ body {
 
 }
 
-.king.blue {
-    background-color: #CBC3E3;
-    border: 1px solid purple;
-    
-}
 
 .pieceSelected {
     background-color: #bdbd87;
@@ -112,6 +99,25 @@ body {
 }
 
 .highlighted {
-    background-color: yellow;
+    background-color: rgba(247, 255, 99, 0.765);
     
 }
+
+button {
+    margin-top: 2vmin;
+    padding: 1.5vmin;
+    font-size: 1.5vmin;
+    font-family: 'Quicksand', sans-serif;
+    letter-spacing: 0.15vmin;
+    border-radius: 2vmin;
+    border: 0.1vmin solid darkgray;
+    color: black;
+    
+}
+
+button:hover {
+    color: lightgray;
+    background-color: rgb(69, 69, 69);
+    transition: background-color 200ms ease-in;
+    
+  }

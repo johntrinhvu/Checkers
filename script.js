@@ -25,7 +25,6 @@ const PLAYERS = {
 
 /* State Variables */
 let turn; // either 1 (blue) or -1 (red)
-let score; // 12 pieces on each side
 let board; // an array of arrays of 8x8 - 64 total spaces
 let winner; // wiiner has to be blue or red, T for draw
 
@@ -36,6 +35,9 @@ let redPieces = document.querySelectorAll("h3");
 let bluePieces = document.querySelectorAll("h4");
 let selectedPiece; // current selected piece
 const resetBoardBtn = document.querySelector("button");
+let htmlBoard = document.getElementById("board");
+const originalBoardState = htmlBoard.innerHTML;
+
 
 /* Event Listeners */
 redPieces.forEach(function (redPiece) {
@@ -48,6 +50,9 @@ bluePieces.forEach(function (bluePiece) {
     bluePiece.addEventListener('click', handleMove);
 
 });
+
+// reset board
+resetBoardBtn.addEventListener("click", resetGame)
 
 // call init
 init();
@@ -214,7 +219,7 @@ function movePiece(cell) {
 
         // now update the score
         PLAYERS[oppositePlayer].score --;
-        console.log(`${PLAYERS[oppositePlayer].name} ${PLAYERS[oppositePlayer].score}`)
+        console.log(`${PLAYERS[oppositePlayer].name.toUpperCase()}: ${PLAYERS[oppositePlayer].score} pieces left.`)
         
     }
 
@@ -224,6 +229,13 @@ function movePiece(cell) {
     // change new cell to the piece
     board[newCol][newRow] = turn;
 
+    
+    // check score if 0 we have winner
+    if (PLAYERS[oppositePlayer].score === 0) {
+        winner = turn;
+        
+    }
+
     // change turn to next player
     turn *= -1;
 
@@ -232,11 +244,20 @@ function movePiece(cell) {
 
 }
 
+function resetGame() {
+    // Clear HTML board
+    htmlBoard.innerHTML = originalBoardState;
+    init();
+
+}
+
+
 function render() {
     renderMessage();
     renderControls();
 
 }
+
 
 function renderMessage() {
     // if tie
