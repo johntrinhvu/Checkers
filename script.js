@@ -5,7 +5,7 @@
 /* Constant Variables */
 const PLAYERS = {
     "1": {
-        "name": "blue", 
+        "name": "blue",
         "color": "#0096FF", // light blue
         "score": 12,
         "identity": 1
@@ -16,7 +16,7 @@ const PLAYERS = {
         "color": "#ff6961", // light red
         "score": 12,
         "id": -1
-        
+
     },
     "draw": "#C4A484", // color for Draw
     "selected": "#bdbd87"
@@ -38,15 +38,15 @@ let selectedPiece; // current selected piece
 const resetBoardBtn = document.querySelector("button");
 
 /* Event Listeners */
-redPieces.forEach(function(redPiece) {
+redPieces.forEach(function (redPiece) {
     redPiece.addEventListener('click', handleMove);
-    
-  
+
+
 });
 
-bluePieces.forEach(function(bluePiece) {
+bluePieces.forEach(function (bluePiece) {
     bluePiece.addEventListener('click', handleMove);
-  
+
 });
 
 // call init
@@ -71,7 +71,7 @@ function init() {
     turn = 1;
     winner = null;
     render();
-    
+
 }
 
 function handleMove(piece) {
@@ -88,11 +88,11 @@ function handleMove(piece) {
     const possibleMoves = getPossibleMoves(currentCol, currentRow);
     // then can click on move
 
-    possibleMoves.forEach(function(possibleMove) {
+    possibleMoves.forEach(function (possibleMove) {
         possibleMove.addEventListener('click', movePiece);
-        
+
     });
-    
+
 }
 
 function highlightCurrentPiece(clickedPiece) {
@@ -102,7 +102,7 @@ function highlightCurrentPiece(clickedPiece) {
     if (clickedPiece.classList.contains(`${PLAYERS[turn].name}`)) {
         selectedPiece = clickedPiece;
         clickedPiece.classList.add("pieceSelected");
-        
+
     }
 }
 
@@ -115,90 +115,124 @@ function removeHighlights() {
     }
 
     allHighlighted = document.querySelectorAll(".highlighted")
-    allHighlighted.forEach(function(cell) {
+    allHighlighted.forEach(function (cell) {
         cell.classList.remove("highlighted");
 
     });
-    
+
 }
 
 function getPossibleMoves(colIdx, rowIdx) {
     // Get current position of the piece that was clicked
     // what the player val is
     const currentPlayer = board[colIdx][rowIdx];
-    
+
     const possibleMoves = [];
 
     // if a piece exists on the board
     if (currentPlayer !== 0) {
         const left = colIdx - 1;
         const right = colIdx + 1;
+        const leftCapture = left - 1;
+        const rightCapture = right + 1;
+        const oppositePlayer = turn * -1;
         let forward = null;
-        
+        let forwardCapture = null;
+
         // if the piece is the same color as current player's turn
         if (currentPlayer === turn) { // blue or red all turns
             forward = rowIdx + turn;
+            forwardCapture = forward + turn;
+
+            // moving adjacent left up
             if (left >= 0 && board[left][forward] === 0) {
                 const cell = document.getElementById(`c${left}r${forward}`);
                 cell.classList.add('highlighted');
                 possibleMoves.push(cell);
-    
+
+                // capture piece left 2 up 2
+            } else if (leftCapture >= 0 && board[leftCapture][forwardCapture] === 0 && board[left][forward] === oppositePlayer) {
+                const cell = document.getElementById(`c${leftCapture}r${forwardCapture}`);
+                cell.classList.add('highlighted');
+                possibleMoves.push(cell);
+
             }
-    
+
+            // moving adjacent right up
             if (right <= 7 && board[right][forward] === 0) {
                 const cell = document.getElementById(`c${right}r${forward}`);
                 cell.classList.add('highlighted');
                 possibleMoves.push(cell);
-                
+
+                // capture piece right 2 up 2
+            } else if (rightCapture <= 7 && board[rightCapture][forwardCapture] === 0 && board[right][forward] === oppositePlayer) {
+                const cell = document.getElementById(`c${rightCapture}r${forwardCapture}`);
+                cell.classList.add('highlighted');
+                possibleMoves.push(cell);
+
             }
         }
+        return possibleMoves;
     }
-    return possibleMoves;
 }
 
-function movePiece(cell) {
-    const moveToLocation = cell.target;
+    function movePiece(cell) {
+        const moveToLocation = cell.target;
+        const oldPos = selectedPiece.parentElement.id;
+        const oldCol = parseInt(oldPos[1]);
+        const oldRow = parseInt(oldPos[3]);
 
-    // to move cell, move piece to another parent;
-    moveToLocation.append(selectedPiece);
-    removeHighlights();
-    cells.forEach(function(cell) {
-        cell.removeEventListener("click", movePiece);
+        // to move cell, move piece to another parent;
+        moveToLocation.append(selectedPiece);
+        removeHighlights();
+        cells.forEach(function (cell) {
+            cell.removeEventListener("click", movePiece);
 
-    });
+        });
 
-    // update board and change turn
-    turn *= -1;
+        // update board and change turn
+        const newPos = moveToLocation.id;
+        const newCol = parseInt(newPos[1]);
+        const newRow = parseInt(newPos[3]);
 
-    // then render the board again
-    render();
+        // change old cell to empty
+        board[oldCol][oldRow] = 0;
 
-}
+        // change new cell to the piece
+        board[newCol][newRow] = turn;
 
-function render() {
-    renderMessage();
-    renderControls();
+        // change turn to next player
+        turn *= -1;
 
-}
+        // then render the board again
+        render();
 
-function renderMessage() {
-    // if tie
-    if (winner === "T") {
-        messageEl.innerHTML = `<span style="color: ${PLAYERS.draw}">DRAW</span>`
-    
-    
-    } else if (winner) {
-        // we have winner
-        messageEl.innerHTML = `<span style="color: ${PLAYERS[winner].color}">${PLAYERS[winner].name.toUpperCase()}</span> WINS!`
-    
-    } else {
-        // Game is still in play
-        messageEl.innerHTML = `<span style="color: ${PLAYERS[turn].color}">${PLAYERS[turn].name.toUpperCase()}</span>'s TURN`
     }
 
-}
+    function render() {
+        renderMessage();
+        renderControls();
 
-function renderControls() {
-    resetBoardBtn.style.visibility = winner ? "visible" : "hidden";
+    }
 
-}
+    function renderMessage() {
+        // if tie
+        if (winner === "T") {
+            messageEl.innerHTML = `<span style="color: ${PLAYERS.draw}">DRAW</span>`
+
+
+        } else if (winner) {
+            // we have winner
+            messageEl.innerHTML = `<span style="color: ${PLAYERS[winner].color}">${PLAYERS[winner].name.toUpperCase()}</span> WINS!`
+
+        } else {
+            // Game is still in play
+            messageEl.innerHTML = `<span style="color: ${PLAYERS[turn].color}">${PLAYERS[turn].name.toUpperCase()}</span>'s TURN`
+        }
+
+    }
+
+    function renderControls() {
+        resetBoardBtn.style.visibility = winner ? "visible" : "hidden";
+
+    }
