@@ -176,63 +176,86 @@ function getPossibleMoves(colIdx, rowIdx) {
     }
 }
 
-    function movePiece(cell) {
-        const moveToLocation = cell.target;
-        const oldPos = selectedPiece.parentElement.id;
-        const oldCol = parseInt(oldPos[1]);
-        const oldRow = parseInt(oldPos[3]);
+function movePiece(cell) {
+    const moveToLocation = cell.target;
+    const oldPos = selectedPiece.parentElement.id;
+    const oldCol = parseInt(oldPos[1]);
+    const oldRow = parseInt(oldPos[3]);
+    const oppositePlayer = turn * -1
 
-        // to move cell, move piece to another parent;
-        moveToLocation.append(selectedPiece);
-        removeHighlights();
-        cells.forEach(function (cell) {
-            cell.removeEventListener("click", movePiece);
+    // to move cell, move piece to another parent;
+    moveToLocation.append(selectedPiece);
+    removeHighlights();
+    cells.forEach(function (cell) {
+        cell.removeEventListener("click", movePiece);
 
-        });
+    });
 
-        // update board and change turn
-        const newPos = moveToLocation.id;
-        const newCol = parseInt(newPos[1]);
-        const newRow = parseInt(newPos[3]);
+    // update board and change turn
+    const newPos = moveToLocation.id;
+    const newCol = parseInt(newPos[1]);
+    const newRow = parseInt(newPos[3]);
+    const colDiff = Math.abs(newCol - oldCol);
+    const rowDiff = Math.abs(newRow - oldRow);
 
-        // change old cell to empty
-        board[oldCol][oldRow] = 0;
 
-        // change new cell to the piece
-        board[newCol][newRow] = turn;
+    // capture a piece if the movement is > 1: newColumn - oldColumn = 2 and newRow - oldRow = 2
+    if (colDiff === 2 && rowDiff === 2) {
+        const capturedCol = (newCol + oldCol) / 2;
+        const capturedRow = (newRow + oldRow) / 2;
+        const capturedCell = document.getElementById(`c${capturedCol}r${capturedRow}`);
+        const childOfCapturedCell = capturedCell.children[0];
+        
+        // now remove the piece
+        capturedCell.removeChild(childOfCapturedCell);
 
-        // change turn to next player
-        turn *= -1;
+        // update board
+        board[capturedCol][capturedRow] = 0;
 
-        // then render the board again
-        render();
-
+        // now update the score
+        PLAYERS[oppositePlayer].score --;
+        console.log(`${PLAYERS[oppositePlayer].name} ${PLAYERS[oppositePlayer].score}`)
+        
     }
 
-    function render() {
-        renderMessage();
-        renderControls();
+    // change old cell to empty
+    board[oldCol][oldRow] = 0;
 
+    // change new cell to the piece
+    board[newCol][newRow] = turn;
+
+    // change turn to next player
+    turn *= -1;
+
+    // then render the board again
+    render();
+
+}
+
+function render() {
+    renderMessage();
+    renderControls();
+
+}
+
+function renderMessage() {
+    // if tie
+    if (winner === "T") {
+        messageEl.innerHTML = `<span style="color: ${PLAYERS.draw}">DRAW</span>`
+
+
+    } else if (winner) {
+        // we have winner
+        messageEl.innerHTML = `<span style="color: ${PLAYERS[winner].color}">${PLAYERS[winner].name.toUpperCase()}</span> WINS!`
+
+    } else {
+        // Game is still in play
+        messageEl.innerHTML = `<span style="color: ${PLAYERS[turn].color}">${PLAYERS[turn].name.toUpperCase()}</span>'s TURN`
     }
 
-    function renderMessage() {
-        // if tie
-        if (winner === "T") {
-            messageEl.innerHTML = `<span style="color: ${PLAYERS.draw}">DRAW</span>`
+}
 
+function renderControls() {
+    resetBoardBtn.style.visibility = winner ? "visible" : "hidden";
 
-        } else if (winner) {
-            // we have winner
-            messageEl.innerHTML = `<span style="color: ${PLAYERS[winner].color}">${PLAYERS[winner].name.toUpperCase()}</span> WINS!`
-
-        } else {
-            // Game is still in play
-            messageEl.innerHTML = `<span style="color: ${PLAYERS[turn].color}">${PLAYERS[turn].name.toUpperCase()}</span>'s TURN`
-        }
-
-    }
-
-    function renderControls() {
-        resetBoardBtn.style.visibility = winner ? "visible" : "hidden";
-
-    }
+}
