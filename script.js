@@ -30,7 +30,7 @@ let board; // an array of arrays of 8x8 - 64 total spaces
 let winner; // wiiner has to be blue or red, T for draw
 
 /* Cached Elements */
-const cells = [...document.querySelectorAll("div")];
+const cells = document.querySelectorAll("div");
 const messageEl = document.querySelector("h1");
 let redPieces = document.querySelectorAll("h3");
 let bluePieces = document.querySelectorAll("h4");
@@ -39,22 +39,15 @@ const resetBoardBtn = document.querySelector("button");
 
 /* Event Listeners */
 redPieces.forEach(function(redPiece) {
-    redPiece.addEventListener('click', handleMove)
+    redPiece.addEventListener('click', handleMove);
     
   
 });
 
 bluePieces.forEach(function(bluePiece) {
-    bluePiece.addEventListener('click', handleMove)
+    bluePiece.addEventListener('click', handleMove);
   
 });
-
-// cells.forEach(function(cell) {
-//     cell.addEventListener('click', handleMove)
-  
-// });
-
-
 
 // call init
 init();
@@ -81,9 +74,14 @@ function init() {
     
 }
 
-function handleMove(evt) {
-    const clickedPiece = evt.target;
-    const clickedPieceId = evt.target.id;
+function handleMove(piece) {
+    // Get the current position of the clicked piece
+    const clickedPiece = piece.target;
+    let currentPos = clickedPiece.parentElement.id;
+    let currentCol = parseInt(currentPos[1]);
+    let currentRow = parseInt(currentPos[3]);
+
+    console.log(currentPos, currentCol, currentRow);
 
     // if there alr is selected piece, remove from the color and set to null
     if (selectedPiece) {
@@ -96,20 +94,54 @@ function handleMove(evt) {
     if (clickedPiece.classList.contains(`${PLAYERS[turn].name}`)) {
         selectedPiece = clickedPiece;
         clickedPiece.classList.add("pieceSelected");
-        console.log(clickedPiece);
-
-        // then highlight possible moves
-
+        
     }
+
+    // then highlight possible moves
+    highlightPossibleMoves(currentCol, currentRow)
+    
+
+
 }
 
+function highlightPossibleMoves(colIdx, rowIdx) {
+    // Get current position of the piece that was clicked
+    // what the player val is
+    const currentCell = board[colIdx][rowIdx];
+    const board_size = board.length * board.length;
+
+    if (currentCell !== 0) {
+        
+
+    }
+    
+}
+
+function isDiagonalCellEmpty(board, currentRow, currentCol, directionRow, directionCol) {
+    // Get the diagonal row and column
+    const diagonalRow = currentRow + directionRow;
+    const diagonalCol = currentCol + directionCol;
+    
+    // Check if the diagonal cell is within the board bounds
+    if (diagonalRow < 0 || diagonalRow >= board.length || diagonalCol < 0 || diagonalCol >= board[0].length) {
+      return false;
+    }
+    
+    // Check if the diagonal cell is empty
+    return board[diagonalRow][diagonalCol] === null;
+  }
+
+function highlightCell(colIdx, rowIdx) {
+    const cell = document.getElementById(`c${colIdx}r${rowIdx}`);
+    cell.classList.add('highlighted');
+
+  }
 
 function render() {
     renderMessage();
     renderControls();
 
 }
-
 
 function renderMessage() {
     // if tie
