@@ -26,30 +26,16 @@ const PLAYERS = {
 /* State Variables */
 let turn; // either 1 (blue) or -1 (red)
 let board; // an array of arrays of 8x8 - 64 total spaces
-let winner; // wiiner has to be blue or red, T for draw
+let winner; // winner has to be blue or red, T for draw
 
 /* Cached Elements */
-const cells = document.querySelectorAll("div");
 const messageEl = document.querySelector("h1");
-let redPieces = document.querySelectorAll("h3");
-let bluePieces = document.querySelectorAll("h4");
 let selectedPiece; // current selected piece
 const resetBoardBtn = document.querySelector("button");
 let htmlBoard = document.getElementById("board");
-const originalBoardState = htmlBoard.innerHTML;
+const originalBoardStateHTML = htmlBoard.innerHTML;
+let cells;
 
-
-/* Event Listeners */
-redPieces.forEach(function (redPiece) {
-    redPiece.addEventListener('click', handleMove);
-
-
-});
-
-bluePieces.forEach(function (bluePiece) {
-    bluePiece.addEventListener('click', handleMove);
-
-});
 
 // reset board
 resetBoardBtn.addEventListener("click", resetGame);
@@ -59,7 +45,23 @@ init();
 
 /* Functions */
 function init() {
-
+    /* Local Scope Cached Elements */
+    cells = document.querySelectorAll("div");
+    let redPieces = document.querySelectorAll("h3");
+    let bluePieces = document.querySelectorAll("h4");
+    
+    /* Event Listeners */
+    redPieces.forEach(function (redPiece) {
+        redPiece.addEventListener('click', handleMove);
+    
+    
+    });
+    
+    bluePieces.forEach(function (bluePiece) {
+        bluePiece.addEventListener('click', handleMove);
+    
+    });
+    
     // to visualize the board's mapping to the DOM, rotate 90 degrees counter-clockwise
     board = [
         [1, 0, 1, 0, 0, 0, -1, 0], // col 0
@@ -126,7 +128,6 @@ function removeHighlights() {
         cell.style.cursor = "default";
 
     });
-
 }
 
 function getPossibleMoves(colIdx, rowIdx) {
@@ -185,6 +186,7 @@ function getPossibleMoves(colIdx, rowIdx) {
             }
         }
         return possibleMoves;
+
     }
 }
 
@@ -213,7 +215,6 @@ function movePiece(cell) {
     const newRow = parseInt(newPos[3]);
     const colDiff = Math.abs(newCol - oldCol);
     const rowDiff = Math.abs(newRow - oldRow);
-
 
     // capture a piece if the movement is > 1: newColumn - oldColumn = 2 and newRow - oldRow = 2
     if (colDiff === 2 && rowDiff === 2) {
@@ -251,32 +252,23 @@ function movePiece(cell) {
     // change turn to next player
     turn *= -1;
     
-
-
     // then render the board again
     render();
 
 }
 
-
 function resetGame() {
     // Reset board state variables
-    htmlBoard.innerHTMl = originalBoardState;
-    // originalBoardState.reset();
-
-    // then call init
+    htmlBoard.innerHTML = originalBoardStateHTML;
     init();
-    console.log("Reset!")
 
 }
-
 
 function render() {
     renderMessage();
     renderControls();
 
 }
-
 
 function renderMessage() {
     // if tie
