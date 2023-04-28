@@ -1,0 +1,106 @@
+John Vu
+28 April 2023
+Psuedocode for Project 1
+
+FOR HTML:
+1. add a header with the name of game, as well as whos turn it is underneath
+
+2. make a section with 64 divs, each with own id of column row
+    setup pieces already on board in div using h3 for red and h4 for blue
+
+3. add a button labled reset; when clicked, reset the game
+
+FOR JAVASCRIPT:
+1. Create a dictionary for the players; blue and red
+    make key 1 for blue and -1 for red; their values will have their color and score: score is 12 for each side has 12 pieces
+
+2. declare state variables;
+    1. who's turn it is
+    2. board is set to null
+    3. winner set to null
+    4. the piece that was clicked (selected piece) is null
+
+3. queryselect all the elements;
+    1. each cell
+    2. redPieces
+    3. bluePieces
+    4. board
+    5. button
+        1. can addEventListener since only 1 button
+        2. make the function call init() again; only visible when game is won.
+
+4. make init function  
+    1. init the board = 8x8, array of arrays look like
+    board = [
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 0
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 1
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 2
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 3
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 4
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 5
+        [1, 0, 1, 0, 0, 0, -1, 0], // col 6
+        [0, 1, 0, 0, 0, -1, 0, -1], // col 7
+
+    ];
+    2. turn would be set to 1(blue) by default
+    3. winner would still be null
+    4. then render the board
+
+5. make render function
+    1. add renderMessage and renderControls
+        1. renderMessage; if there is a winner, update the game so that the header states (player) WINS instead of (player)'s turn
+        2. renderControls; when the winner is declared, make the reset button visible; else hidden
+
+6. make a handleMove function
+    1. in this function, get the clicked piece
+        1. because the clickedPiece will be an h3 or h4, need to get the parent element to get the location of the clicked piece
+        2. once get location (id of div); parseInt the c(colId)r(rowId) = parseInt(clickedPiece[1]); parseInt(clickedPiece[3])
+        3. this will be the currentPosition (c(colIdx)r(rowIdx)); and currentCol and currentRow, where the piece is clicked.
+
+    2. After we have this information, we will highlight that piece.
+    3. Then, we will highlight the possible moves that the clicked piece can move to
+        1. Since checker pieces can only move diagonally, make a possibleMoves function to find where it can getPossibleMoves
+            1. This function will be called getPossibleMoves, where we will store possibleMoves in an array and append them to it.
+            2. if the current player (red or blue) is on a cell,
+                1. declare diagonal variables; to move left, you do column - 1; to move right; column + 1; forwward = row + turn
+
+            3. if the piece is the same color as the person's turn:
+                1. if you are moving left 1 up 1:
+                    1. if the move is valid on the board (>0 since column cannot be less than 0) and the space in that cell is empty (board[left][forward] === 0)
+                        1. add that cell to highlighted
+                        2. possibleMoves.push(piece) into the possibleMoves array
+
+                2. if you are moving right 1 up 1:
+                    same as above, just switch values to board[right]
+
+                3. capture logic is jump over 1 piece, so left - 1 and right + 1; which would be -2 and +2
+
+    4. Now, make a movePiece function that actually registers the move
+        1. In this function, you get the cell.id that the cell that the user clicked is on.
+        2. Make variables for all of the old positions; the oldPos of the piece, oldCol, and oldRow, to keep track of where it was.
+        3. To move that cell, we would append the selectedPiece to the new location
+        4. Then after, remove all the highlights on the board so that nothing is highlighted anymore
+        5. Then after, remove the click.EvenetListener so that it becomes unclickable
+        6. Now, update the board and change the turn
+        7. If we capture a piece, we have to consider differently:
+            1. Get the newPos, newCol, and newRow;
+            2. Take the difference between new and old to see if it is left - 1 and right + 1; basically if the piece moved from c1r3 to c3r5;
+            3. If it did, make new const to hold the capturedCell, which would be capturedCol and capturedRow;
+            4. then, remove that child(piece) from the div element, so the piece no longer exists.
+        8. update the board
+        9. update the score after
+        10. change that old cell to empty = 0
+        11. and change the new cell to the piece that captured the other
+        12. If score = 0;
+            1. we have winner
+            else;
+            2. change turn
+
+        13. render the game
+
+7. highlight function
+    1. if the piece contains the color (red or blue)
+        1. that selected piece will become the clickedPiece
+        2. then it will have the class highlighted, changing its color
+
+    2. remove highlight after deselected.

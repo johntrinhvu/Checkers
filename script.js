@@ -15,7 +15,7 @@ const PLAYERS = {
         "name": "red",
         "color": "#ff6961", // light red
         "score": 12,
-        "id": -1
+        "identity": -1
 
     },
     "draw": "#C4A484", // color for Draw
@@ -220,6 +220,8 @@ function movePiece(cell) {
         const capturedCol = (newCol + oldCol) / 2;
         const capturedRow = (newRow + oldRow) / 2;
         const capturedCell = document.getElementById(`c${capturedCol}r${capturedRow}`);
+
+        // the h3 or h4 piece
         const childOfCapturedCell = capturedCell.children[0];
         
         // now remove the piece
