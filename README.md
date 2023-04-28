@@ -6,16 +6,16 @@ Checkers is a classic board game where two players face off against each other, 
 
 ## Screenshot(s)
 
-## Initial Board State
+### Initial Board State
 ![InitialBoardState](https://github.com/johntrinhvu/Checkers/blob/main/game-screenshots/InitialBoardState.png?raw=true)
 
-## Piece Highlighted
+### Piece Highlighted
 ![PieceHighlighted](https://github.com/johntrinhvu/Checkers/blob/main/game-screenshots/PieceHighlighted.png?raw=true)
 
-## Piece Capture Highlight
+### Piece Capture Highlight
 ![PieceCaptureHighlight](https://github.com/johntrinhvu/Checkers/blob/main/game-screenshots/PieceHighlightCapture.png?raw=true)
 
-## Win Screen
+### Win Screen
 ![WinScreen](https://github.com/johntrinhvu/Checkers/blob/main/game-screenshots/WinScreen.png?raw=true)
 
 
