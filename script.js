@@ -85,7 +85,6 @@ function init() {
 function handleMove(evt) {
     // Get the current position of the clicked piece
     const clickedPiece = evt.target;
-    console.log(clickedPiece);
     let currentPos = clickedPiece.parentElement.id;
     let currentCol = parseInt(currentPos[1]);
     let currentRow = parseInt(currentPos[3]);
@@ -260,6 +259,8 @@ function movePiece(cell) {
 function resetGame() {
     // Reset board state variables
     htmlBoard.innerHTML = originalBoardStateHTML;
+
+    // call init again to reset the board data
     init();
 
 }
@@ -288,6 +289,7 @@ function renderMessage() {
 }
 
 function renderControls() {
+    // set reset board to invisible until there is a winner
     resetBoardBtn.style.visibility = winner ? "visible" : "hidden";
 
 }

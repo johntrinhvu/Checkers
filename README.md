@@ -37,4 +37,4 @@ To play the game, simply click on the following link: [Checkers](https://johntri
 - Add a timer to make the game more challenging.
 - Implement multiplayer functionality to allow players to play against each other online.
 
-That's it! Thank you for playing Checkers. We hope you enjoy the game!
+That's it! Thank you for playing Checkers. Hope you enjoy my game!
