@@ -7,14 +7,14 @@ const PLAYERS = {
     "1": {
         "name": "blue",
         "color": "#0096FF", // light blue
-        "score": 12,
+        "score": null,
         "identity": 1
 
     },
     "-1": {
         "name": "red",
         "color": "#ff6961", // light red
-        "score": 12,
+        "score": null,
         "identity": -1
 
     },
@@ -45,7 +45,12 @@ init();
 
 /* Functions */
 function init() {
+    // make score local
+    PLAYERS[1].score = 12;
+    PLAYERS[-1].score = 12;
+    
     /* Local Scope Cached Elements */
+    
     cells = document.querySelectorAll("div");
     let redPieces = document.querySelectorAll("h3");
     let bluePieces = document.querySelectorAll("h4");
